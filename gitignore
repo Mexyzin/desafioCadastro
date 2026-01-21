@@ -1,3 +1,15 @@
-.idea
-.code
-.vscode
+# IDEs
+.idea/
+.vscode/
+
+# Compilados Java
+*.class
+target/
+out/
+
+# Logs
+*.log
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
