@@ -1,29 +1,18 @@
 package services;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
+import repository.FormularioRepository;
+
 import java.util.List;
 
 public class FormularioService {
 
-    public static List<String> readFile() {
-        File file = new File("/home/mexy/Documentos/IntelliJ/desafioCadastro/main/resources/formulario.txt");
-        List<String> listForm = new ArrayList<>();
+    private final FormularioRepository repository = new FormularioRepository();
 
-        try (FileReader fr = new FileReader(file);
-             BufferedReader br = new BufferedReader(fr)) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                listForm.add(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return listForm;
+    public List<String> obterPerguntasDoFormulario() {
+        return repository.lerPerguntas();
     }
 
+    public List<String> obterPerguntasDoFormularioEndereco() {
+        return repository.lerPerguntasEndereco();
+    }
 }
