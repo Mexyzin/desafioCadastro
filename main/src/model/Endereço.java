@@ -73,6 +73,11 @@ public class Endereço {
 
     }
 
+    @Override
+    public String toString() {
+        return rua + ", " + numeroDaCasa + ", " + cidade;
+    }
+
     private static boolean isCampoVazio(String campo){
         return campo == null || campo.isBlank();
     }

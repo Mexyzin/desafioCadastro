@@ -113,6 +113,34 @@ public class Pet {
         return campo == null || campo.isBlank();
     }
 
+
+    public String getNomeCompleto() {
+        return nomeCompleto;
+    }
+
+    public TipoPet getTipoPet() {
+        return tipoPet;
+    }
+
+    public SexoPet getSexoPet() {
+        return sexoPet;
+    }
+
+    public Endereço getEndereço() {
+        return endereço;
+    }
+
+    public String getIdade() {
+        return idade;
+    }
+
+    public String getPeso() {
+        return peso;
+    }
+
+    public String getRaça() {
+        return raça;
+    }
 }
 
 
