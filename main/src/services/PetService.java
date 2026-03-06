@@ -31,7 +31,7 @@ public class PetService {
         System.out.println(listForm.get(3));
         String numeroDaCasa = perguntarAteValido("  " + listFormEndereco.get(0), sc, Endereço::validarNumeroDaCasa);
         String nomeDaCidade = perguntarAteValido("  " + listFormEndereco.get(1), sc, Endereço::validarCidade);
-        String nomeDaRua = perguntarAteValido(" " + listFormEndereco.get(2), sc, Endereço::validarRua);
+        String nomeDaRua = perguntarAteValido("  " + listFormEndereco.get(2), sc, Endereço::validarRua);
 
         Endereço endereço = new Endereço(numeroDaCasa, nomeDaCidade, nomeDaRua);
         respostas.add(endereço.toString());
@@ -48,22 +48,18 @@ public class PetService {
         petRepository.salvarPet(pet, respostas);
     }
 
-    private <T> T perguntarAteValido(String pergunta, Scanner sc, Function<String, T> validador) {
-        System.out.print(pergunta + " ");
+    public static <T> T perguntarAteValido(String pergunta, Scanner sc, Function<String, T> validador) {
         while (true) {
+            System.out.print(pergunta + " ");
             String entrada = sc.nextLine();
             try {
                 return validador.apply(entrada);
             } catch (IllegalArgumentException e) {
-                System.out.print("Erro: " + e.getMessage());
+                System.out.println("Erro: " + e.getMessage());
             }
         }
     }
 
-
-    private static boolean isCampoVazio(String campo) {
-        return campo == null || campo.isBlank();
-    }
 
     public static void main(String[] args) {
         PetService petService = new PetService();

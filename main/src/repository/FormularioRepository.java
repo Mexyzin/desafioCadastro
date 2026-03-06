@@ -20,7 +20,7 @@ public class FormularioRepository {
     }
 
     public List<String> lerMenu() {
-        Path path = Paths.get("desafioCadastro", "main", "src", "resources", "menu.txt");
+        Path path = Paths.get("main", "resources", "menu.txt");
 
         try {
             return Files.readAllLines(path);

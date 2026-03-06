@@ -113,6 +113,18 @@ public class Pet {
         return campo == null || campo.isBlank();
     }
 
+    @Override
+    public String toString() {
+        return "Pet{" +
+                "nomeCompleto='" + nomeCompleto + '\'' +
+                ", tipoPet=" + tipoPet +
+                ", sexoPet=" + sexoPet +
+                ", endereço=" + endereço +
+                ", idade='" + idade + '\'' +
+                ", peso='" + peso + '\'' +
+                ", raça='" + raça + '\'' +
+                '}';
+    }
 
     public String getNomeCompleto() {
         return nomeCompleto;
