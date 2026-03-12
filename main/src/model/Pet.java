@@ -15,6 +15,7 @@ public class Pet {
     private String idade;
     private String peso;
     private String raça;
+    private String nomeArquivo;
     private final static String VALOR_PADRAO = "NAO_INFORMADO";
 
 
@@ -152,6 +153,14 @@ public class Pet {
 
     public String getRaça() {
         return raça;
+    }
+
+    public String getNomeArquivo() {
+        return nomeArquivo;
+    }
+
+    public void setNomeArquivo(String nomeArquivo) {
+        this.nomeArquivo = nomeArquivo;
     }
 }
 

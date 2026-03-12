@@ -26,7 +26,7 @@ public class MenuPrincipal {
         while (true) {
 
 
-            System.out.println("=====================================================\n" +
+            System.out.println("\n=====================================================\n" +
                     "          \uD83D\uDC3E SISTEMA DE ADOÇÃO PET AMIGO \uD83D\uDC3E          \n" +
                     "=====================================================");
             System.out.println();
@@ -56,7 +56,7 @@ public class MenuPrincipal {
                     petService.cadastrarPet();
                     break;
                 case 2:
-                    System.out.println("Alterar pet (em desenvolvimento)");
+                    petService.alterarPet();
                     break;
                 case 3:
                     System.out.println("Deletar pet (em desenvolvimento)");
@@ -65,7 +65,7 @@ public class MenuPrincipal {
                     System.out.println("Listar todos os pets (em desenvolvimento)");
                     break;
                 case 5:
-                    MenuBusca.iniciarBusca();
+                    MenuBusca.buscarPet();
                     break;
                 case 6:
                     System.out.println("Saindo do sistema...");

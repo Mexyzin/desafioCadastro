@@ -9,7 +9,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -67,9 +66,9 @@ public class PetRepository {
             if (i + 1 == 4) {
                 formatarLinhas.add((i + 1) + " - " + "Rua " + respostas.get(i));
             } else if (i + 1 == 5) {
-                formatarLinhas.add((i + 1) + " - " + respostas.get(i) + " anos");
+                formatarLinhas.add((i + 1) + " - " + (respostas.get(i).equals("NAO_INFORMADO") ? respostas.get(i) : respostas.get(i) + " anos"));
             } else if (i + 1 == 6) {
-                formatarLinhas.add((i + 1) + " - " + respostas.get(i) + "kg");
+                formatarLinhas.add((i + 1) + " - " + (respostas.get(i).equals("NAO_INFORMADO") ? respostas.get(i) : respostas.get(i) + "kg"));
             } else {
                 formatarLinhas.add((i + 1) + " - " + respostas.get(i));
             }
@@ -77,78 +76,6 @@ public class PetRepository {
         }
         return formatarLinhas;
     }
-
-
-//    public List<Pet> carregarPets() {
-//        List<String> linhas;
-//        try {
-//            linhas = Files.readAllLines(Path.of(DIRECTORY));
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        for (String linha : linhas) {
-//            String[] partes = linha.split(" - ");
-//            int codigo = Integer.parseInt(partes[0].trim());
-//            String valor = partes[1].trim();
-//
-//            switch (codigo) {
-//                case 1:
-//
-//            }
-//        }
-//    }
-
-    public List<Pet> buscarTodosOsPets(){
-        List<Pet> listaDePets = new ArrayList<>();
-        File diretorio = new File("petsCadastrados");
-
-        File[] arquivos =  diretorio.listFiles();
-
-        if (arquivos != null){
-            for (File arquivo : arquivos) {
-                try{
-                    List<String> linhas = Files.readAllLines(arquivo.toPath());
-                    String nome = Pet.validarNome(linhas.get(0).split(" - ")[1]);
-                    TipoPet tipoPet = TipoPet.validarTipoPet(linhas.get(1).split(" - ")[1]);
-                    SexoPet sexoPet = SexoPet.validarSexoPet(linhas.get(2).split(" - ")[1]);
-
-                    String endereçoCompleto = linhas.get(3).split(" - ")[1];
-                    String[] partes = endereçoCompleto.split(",");
-
-                    String rua = Endereço.validarRua(partes[0].trim());
-                    String numeroDaCasa = Endereço.validarNumeroDaCasa(partes[1].trim());
-                    String cidade = Endereço.validarCidade(partes[2].trim());
-
-                    String idade = Pet.validarIdade(linhas.get(4).split(" - ")[1].replace("anos", ""));
-                    String peso = Pet.validarPesoPet(linhas.get(5).split(" - ")[1].replace("kg", ""));
-                    String raca = Pet.validarRaca(linhas.get(6).split(" - ")[1]);
-
-
-                    Endereço endereço = new Endereço(numeroDaCasa, cidade, rua);
-                    Pet pet = new Pet(nome, tipoPet, sexoPet, endereço, idade, peso, raca);
-
-                    listaDePets.add(pet);
-                }catch (IOException e){
-                    System.out.println("Erro ao ler arquivo: " + arquivo.getName());
-                }
-            }
-        }
-
-        return listaDePets;
-    }
-
-//    public void listarArquivosTEST() {
-//        Path caminho = Paths.get(DIRECTORY);
-//
-//        try (DirectoryStream<Path> stream = Files.newDirectoryStream(caminho)) {
-//            for (Path entry : stream) {
-//                System.out.println(entry.getFileName());
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     public List<Pet> listarPets() {
         List<Pet> pets = new ArrayList<>();
@@ -201,8 +128,9 @@ public class PetRepository {
             String cidade =partesEnd.length > 2 ? partesEnd[2] : "";
 
             Endereço endereço = new Endereço(numero, cidade, rua);
-
-            return new Pet(nome, tipoPet, sexoPet, endereço, idade, peso, raca);
+            Pet pet = new Pet(nome, tipoPet, sexoPet, endereço, idade, peso, raca);
+            pet.setNomeArquivo(arquivo.getFileName().toString());
+            return pet;
         } catch (Exception e){
             System.out.println("Aviso: arquivo possivelmente corrompoido ou formato inválido ignorado (" + arquivo.getFileName() + "): " + e.getMessage());
             return null;
@@ -218,9 +146,60 @@ public class PetRepository {
         return linha;
     }
 
+    public void alterarDadosPet(Pet petAntigo, Pet petNovo, List<String> novasRespostas){
+        String novoNomeArquivo = gerarNomeArquivo(petNovo);
+        Path novoPath = Paths.get(DIRECTORY, novoNomeArquivo);
+
+        List<String> conteudoFinal = formatarConteudo(novasRespostas);
+
+        try (BufferedWriter bw = Files.newBufferedWriter(novoPath, StandardCharsets.UTF_8)){
+            for (String line : conteudoFinal){
+                bw.write(line);
+                bw.newLine();
+            }
+            bw.flush();
+        } catch (IOException e){
+            System.err.println("ERRO CRITICO: Falha ao gravar novo ficheiro. Dados antigos preservados.");
+            throw new RuntimeException("Atualização cancelada: " + e.getMessage(), e);
+        }
+
+        if (Files.exists(novoPath)){
+            try {
+                Path pathAntigo = Paths.get(DIRECTORY, petAntigo.getNomeArquivo());
+                Files.deleteIfExists(pathAntigo);
+            }catch (IOException e){
+                System.err.println("AVISO: Novo ficheiro criado, mas falha ao remover antigo: " + e.getMessage());
+            }
+        }
+    }
+
+    public List<String> realizarMergeDeDados(Pet petAntigo, String[] novosCampos){
+        List<String> respostaMescladas = new ArrayList<>();
+
+        respostaMescladas.add(novosCampos[0] != null ? novosCampos[0] : petAntigo.getNomeCompleto());
+        respostaMescladas.add(novosCampos[1] != null ? novosCampos[1] : petAntigo.getTipoPet().getTipoPet());
+        respostaMescladas.add(novosCampos[2] != null ? novosCampos[2] : petAntigo.getSexoPet().getSexoPet());
+        respostaMescladas.add(novosCampos[3] != null ? novosCampos[3] : petAntigo.getEndereço().toString());
+        respostaMescladas.add(novosCampos[4] != null ? novosCampos[4] : petAntigo.getIdade());
+        respostaMescladas.add(novosCampos[5] != null ? novosCampos[5] : petAntigo.getPeso());
+        respostaMescladas.add(novosCampos[6] != null ? novosCampos[6] : petAntigo.getRaça());
+
+        return respostaMescladas;
+    }
+
+    public void deletarArquivoPet(String nomeArquivo){
+        try {
+            Path path = Paths.get(DIRECTORY, nomeArquivo);
+            Files.deleteIfExists(path);
+        } catch (IOException e){
+            System.out.println("Erro ao remover arquivo antigo: " + e.getMessage());
+        }
+    }
+
+
+
     public static void main(String[] args) {
         PetRepository petRep = new PetRepository();
-//        petRep.listarArquivosTEST();
     }
 
 }

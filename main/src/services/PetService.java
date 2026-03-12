@@ -5,6 +5,7 @@ import model.Pet;
 import model.enums.SexoPet;
 import model.enums.TipoPet;
 import repository.PetRepository;
+import ui.MenuBusca;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,21 +50,84 @@ public class PetService {
     }
 
     public static <T> T perguntarAteValido(String pergunta, Scanner sc, Function<String, T> validador) {
+        System.out.print(pergunta + " ");
         while (true) {
-            System.out.print(pergunta + " ");
             String entrada = sc.nextLine();
             try {
                 return validador.apply(entrada);
             } catch (IllegalArgumentException e) {
-                System.out.println("Erro: " + e.getMessage());
+                System.out.print("Erro: " + e.getMessage());
             }
+        }
+    }
+
+    public void alterarPet(){
+        PetRepository petRepository = new PetRepository();
+        Scanner sc = new Scanner(System.in);
+
+        List<Pet> todosPets = petRepository.listarPets();
+        if(todosPets.isEmpty()){
+            System.out.println("Nenhum pet cadastrado.");
+            return;
+        }
+
+      List<Pet> pets = MenuBusca.buscarPet();
+
+        if(pets.isEmpty()){
+            System.out.println("Nenhum pet encontrado com os critérios informados. Tente novamente.");
+            return;
+        }
+
+        System.out.print("\nEscolha o número do pet >> ");
+        int escolha = -1;
+        while (true){
+            try {
+                escolha = Integer.parseInt(sc.nextLine()) - 1;
+                if (escolha >= 0 && escolha < pets.size()){
+                    break;
+                }
+                System.out.print("Opção inválida. Escolha um número entre 1 e " + pets.size() + " >> ");
+
+            }catch (NumberFormatException e){
+                System.out.print("Por favor, digite um número válido >> ");
+            }
+        }
+
+        Pet petAntigo = pets.get(escolha);
+
+        String[] camposEditados = MenuBusca.menuAlterarDados(sc, petAntigo);
+
+        List<String> respostaMescladas = petRepository.realizarMergeDeDados(petAntigo,camposEditados);
+
+        String novoNome = respostaMescladas.get(0);
+        TipoPet novoTipo = TipoPet.validarTipoPet(respostaMescladas.get(1));
+        SexoPet novoSexo = SexoPet.validarSexoPet(respostaMescladas.get(2));
+
+        String enderecoStr = respostaMescladas.get(3);
+        String[] partesEnd = enderecoStr.split(", ");
+        String rua = partesEnd.length > 0 ? partesEnd[0] : "";
+        String numero = partesEnd.length > 1 ? partesEnd[1] : "";
+        String cidade = partesEnd.length > 2 ? partesEnd[2] : "";
+        Endereço novoEndereco = new Endereço(numero, cidade, rua);
+
+        String novaIdade = respostaMescladas.get(4);
+        String novoPeso = respostaMescladas.get(5);
+        String novaRaca = respostaMescladas.get(6);
+
+        Pet petNovo = new Pet(novoNome, novoTipo, novoSexo, novoEndereco, novaIdade, novoPeso, novaRaca);
+
+        try {
+            petRepository.alterarDadosPet(petAntigo, petNovo, respostaMescladas);
+            System.out.println("\n Pet atualizado com sucesso!");
+        }catch (Exception e){
+            System.err.println("\n Erro ao atualizar pet: " + e.getMessage());
         }
     }
 
 
     public static void main(String[] args) {
         PetService petService = new PetService();
-        petService.cadastrarPet();
+        petService.alterarPet();
     }
 
 }
