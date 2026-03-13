@@ -31,9 +31,4 @@ public enum TipoPet {
         throw new ValidacaoException("Tipo inválido! Por favor, digite um tipo válido (Gato/Cachorro) >> ");
     }
 
-    public static void main(String[] args) {
-        System.out.println(validarTipoPet("CachORRo"));
-
-    }
-
 }

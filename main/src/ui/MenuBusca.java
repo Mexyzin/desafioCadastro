@@ -15,8 +15,7 @@ import java.util.Scanner;
 
 public class MenuBusca {
 
-    public static List<Pet> buscarPet() {
-        Scanner sc = new Scanner(System.in);
+    public static List<Pet> buscarPet(Scanner sc) {
         PetRepository petRepository = new PetRepository();
         BuscarPetService buscarPetService = new BuscarPetService();
 
@@ -284,10 +283,5 @@ public class MenuBusca {
         return petAntigo.getEndereço().toString();
     }
 
-
-    public static void main(String[] args) {
-        MenuBusca menuBusca = new MenuBusca();
-
-    }
 }
 

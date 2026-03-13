@@ -16,10 +16,9 @@ public class MenuPrincipal {
         }
     }
 
-    public static void showMenu() {
+    public static void showMenu(Scanner sc) {
         FormularioRepository formularioRepository = new FormularioRepository();
         List<String> menuOptions = formularioRepository.lerMenu();
-        Scanner sc = new Scanner(System.in);
         PetService petService = new PetService();
 
 
@@ -53,19 +52,19 @@ public class MenuPrincipal {
             switch (option) {
                 case 1:
                     System.out.println("Cadastrar novo pet (em desenvolvimento)");
-                    petService.cadastrarPet();
+                    petService.cadastrarPet(sc);
                     break;
                 case 2:
-                    petService.alterarPet();
+                    petService.alterarPet(sc);
                     break;
                 case 3:
-                    petService.deletarPet();
+                    petService.deletarPet(sc);
                     break;
                 case 4:
                     petService.listarTodosPets();
                     break;
                 case 5:
-                    MenuBusca.buscarPet();
+                    MenuBusca.buscarPet(sc);
                     break;
                 case 6:
                     System.out.println("Saindo do sistema...");
@@ -75,23 +74,4 @@ public class MenuPrincipal {
 
     }
 
-
-//    public static void limparTerminal() {
-//        try {
-//            String os = System.getProperty("os.name").toLowerCase();
-//
-//            if (os.contains("win")) {
-//                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-//            } else {
-//                new ProcessBuilder("clear").inheritIO().start().waitFor();
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-
-    public static void main(String[] args) {
-        showMenu();
-    }
 }

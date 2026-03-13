@@ -40,28 +40,4 @@ public class FormularioRepository {
         }
     }
 
-    public static void main(String[] args) {
-        FormularioRepository repository = new FormularioRepository();
-        repository.lerPerguntas();
-    }
 }
-
-
-/*
-    public static List<String> displayMenus(String path){
-        File file = new File(path);
-        List<String> listForm = new ArrayList<>();
-
-        try (FileReader fr = new FileReader(file);
-             BufferedReader br = new BufferedReader(fr)) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                listForm.add(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return listForm;
-    }
- */

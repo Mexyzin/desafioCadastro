@@ -6,7 +6,6 @@ import model.enums.SexoPet;
 import model.enums.TipoPet;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -194,12 +193,6 @@ public class PetRepository {
         } catch (IOException e){
             System.out.println("Erro ao remover arquivo antigo: " + e.getMessage());
         }
-    }
-
-
-
-    public static void main(String[] args) {
-        PetRepository petRep = new PetRepository();
     }
 
 }

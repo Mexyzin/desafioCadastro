@@ -10,22 +10,8 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class BuscarPetService {
-    Scanner sc = new Scanner(System.in);
 
-//    public void filtroPesquisa(int option) {
-//
-//        switch (option) {
-//            case 1:
-//                System.out.print("Digite o nome ou sobrenome do pet que você deseja encontrar >> ");
-//
-//                String nome = verificarNome();
-//
-//            case 2:
-//                System.out.print(" ");
-//        }
-//    }
-
-    private String verificarNome() {
+    private String verificarNome(Scanner sc) {
         String nomeFormatado;
 
         while (true) {
@@ -110,8 +96,4 @@ public class BuscarPetService {
                 .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
     }
 
-    public static void main(String[] args) {
-        BuscarPetService buscar = new BuscarPetService();
-//        buscar.filtroPesquisa(1);
-    }
 }

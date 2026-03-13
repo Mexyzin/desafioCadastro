@@ -16,9 +16,8 @@ import static ui.MenuBusca.buscarPet;
 
 public class PetService {
 
-    public void cadastrarPet() {
+    public void cadastrarPet(Scanner sc) {
         FormularioService formularioService = new FormularioService();
-        Scanner sc = new Scanner(System.in);
 
         List<String> listForm = formularioService.obterPerguntasDoFormulario();
         List<String> listFormEndereco = formularioService.obterPerguntasDoFormularioEndereco();
@@ -63,9 +62,8 @@ public class PetService {
         }
     }
 
-    public void alterarPet() {
+    public void alterarPet(Scanner sc) {
         PetRepository petRepository = new PetRepository();
-        Scanner sc = new Scanner(System.in);
 
         List<Pet> todosPets = petRepository.listarPets();
         if (todosPets.isEmpty()) {
@@ -73,7 +71,7 @@ public class PetService {
             return;
         }
 
-        List<Pet> pets = buscarPet();
+        List<Pet> pets = buscarPet(sc);
 
         if (pets.isEmpty()) {
             System.out.println("Nenhum pet encontrado com os critérios informados. Tente novamente.");
@@ -126,10 +124,8 @@ public class PetService {
         }
     }
 
-    public void deletarPet() {
-        Scanner sc = new Scanner(System.in);
-
-        List<Pet> pets = buscarPet();
+    public void deletarPet(Scanner sc) {
+        List<Pet> pets = buscarPet(sc);
 
         if (pets.isEmpty()) {
             System.out.println("Nenhum pet encontrado com os critérios informados. Tente novamente.");
@@ -206,12 +202,6 @@ public class PetService {
 
             System.out.print("Opção inválida. Por favor, escolha entre SIM para concluir a operação e NAO para cancelar >> ");
         }
-    }
-
-
-    public static void main(String[] args) {
-        PetService petService = new PetService();
-        petService.listarTodosPets();
     }
 
 }
