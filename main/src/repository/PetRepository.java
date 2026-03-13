@@ -178,10 +178,10 @@ public class PetRepository {
         respostaMescladas.add(novosCampos[0] != null ? novosCampos[0] : petAntigo.getNomeCompleto());
         respostaMescladas.add(novosCampos[1] != null ? novosCampos[1] : petAntigo.getTipoPet().getTipoPet());
         respostaMescladas.add(novosCampos[2] != null ? novosCampos[2] : petAntigo.getSexoPet().getSexoPet());
-        respostaMescladas.add(novosCampos[3] != null ? novosCampos[3] : petAntigo.getEndereço().toString());
+        respostaMescladas.add(novosCampos[3] != null ? novosCampos[3] : petAntigo.getEndereco().toString());
         respostaMescladas.add(novosCampos[4] != null ? novosCampos[4] : petAntigo.getIdade());
         respostaMescladas.add(novosCampos[5] != null ? novosCampos[5] : petAntigo.getPeso());
-        respostaMescladas.add(novosCampos[6] != null ? novosCampos[6] : petAntigo.getRaça());
+        respostaMescladas.add(novosCampos[6] != null ? novosCampos[6] : petAntigo.getRaca());
 
         return respostaMescladas;
     }

@@ -159,10 +159,10 @@ public class PetService {
                     p.getNomeCompleto(),
                     p.getTipoPet().getTipoPet(),
                     p.getSexoPet().getSexoPet(),
-                    p.getEndereço().toString(),
+                    p.getEndereco().toString(),
                     p.getIdade(),
                     p.getPeso(),
-                    p.getRaça());
+                    p.getRaca());
             System.out.println(linha);
         }
     }

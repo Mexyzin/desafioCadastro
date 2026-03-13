@@ -12,9 +12,9 @@ public class Endereço {
     private static final String VALOR_PADRAO = "NAO_INFORMADO";
 
     public Endereço(String numeroDaCasa, String cidade, String rua) {
-        this.numeroDaCasa = numeroDaCasa;
-        this.cidade = cidade;
-        this.rua = rua;
+        this.numeroDaCasa = validarNumeroDaCasa(numeroDaCasa);
+        this.cidade = validarCidade(cidade);
+        this.rua = validarRua(rua);
     }
 
     public static String validarNumeroDaCasa(String numeroDaCasa) {
@@ -38,7 +38,6 @@ public class Endereço {
 
     }
 
-    // edfadfadsfa
     public static String validarCidade(String nomeDaCidade) {
         if (isCampoVazio(nomeDaCidade)) {
             throw new ValidacaoException("Campo vazio! Informe uma cidade >> ");

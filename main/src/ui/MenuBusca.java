@@ -117,10 +117,10 @@ public class MenuBusca {
                         p.getNomeCompleto(),
                         p.getTipoPet().getTipoPet(),
                         p.getSexoPet().getSexoPet(),
-                        p.getEndereço().toString(),
+                        p.getEndereco().toString(),
                         p.getIdade(),
                         p.getPeso(),
-                        p.getRaça());
+                        p.getRaca());
                 System.out.println(linha);
             }
         }
@@ -150,8 +150,8 @@ public class MenuBusca {
         System.out.println(" - Sexo: " + petAntigo.getSexoPet().getSexoPet() + " [NAO PODE SER ALTERADO]");
         System.out.println(" - Idade: " + petAntigo.getIdade() + " anos");
         System.out.println(" - Peso: " + petAntigo.getPeso() + " kg");
-        System.out.println(" - Raça: " + petAntigo.getRaça());
-        System.out.println(" - Endereço: " + "Rua " + petAntigo.getEndereço().toString());
+        System.out.println(" - Raça: " + petAntigo.getRaca());
+        System.out.println(" - Endereço: " + "Rua " + petAntigo.getEndereco().toString());
 
         while (true) {
             System.out.println("\n Qual dado do Pet você deseja alterar? [O Tipo e Sexo do Pet não são possível de alterar]");
@@ -247,7 +247,7 @@ public class MenuBusca {
             }
         }
 
-        String[] partesAtual = petAntigo.getEndereço().toString().split(", ");
+        String[] partesAtual = petAntigo.getEndereco().toString().split(", ");
         String ruaAtual = partesAtual.length > 0 ? partesAtual[0] : "";
         String numeroAtual = partesAtual.length > 1 ? partesAtual[1] : "";
         String cidadeAtual = partesAtual.length > 2 ? partesAtual[2] : "";
@@ -280,7 +280,7 @@ public class MenuBusca {
                 return nomeDaRuaEndereco + ", " + numeroDaCasaEndereco + ", " + nomeDaCidadeEndereco;
         }
 
-        return petAntigo.getEndereço().toString();
+        return petAntigo.getEndereco().toString();
     }
 
 }

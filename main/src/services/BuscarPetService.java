@@ -61,10 +61,10 @@ public class BuscarPetService {
                             match = matchParcial(pet.getPeso(), valorBuscado);
                             break;
                         case "raca":
-                            match = matchParcial(pet.getRaça(), valorBuscado);
+                            match = matchParcial(pet.getRaca(), valorBuscado);
                             break;
                         case "endereco":
-                            match = matchParcial(pet.getEndereço().toString(), valorBuscado);
+                            match = matchParcial(pet.getEndereco().toString(), valorBuscado);
                     }
 
                     if (!match){

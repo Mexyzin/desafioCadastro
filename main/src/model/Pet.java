@@ -4,31 +4,28 @@ import exception.ValidacaoException;
 import model.enums.SexoPet;
 import model.enums.TipoPet;
 
-import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class Pet {
     private String nomeCompleto;
     private TipoPet tipoPet;
     private SexoPet sexoPet;
-    private Endereço endereço;
+    private Endereço endereco;
     private String idade;
     private String peso;
-    private String raça;
+    private String raca;
     private String nomeArquivo;
     private final static String VALOR_PADRAO = "NAO_INFORMADO";
 
-
-    public Pet(String nomeCompleto, TipoPet tipoPet, SexoPet sexoPet, Endereço endereço, String idade, String peso, String raça) {
-        this.nomeCompleto = nomeCompleto;
+    public Pet(String nomeCompleto, TipoPet tipoPet, SexoPet sexoPet, Endereço endereco, String idade, String peso, String raca) {
+        this.nomeCompleto = validarNome(nomeCompleto);
         this.tipoPet = tipoPet;
         this.sexoPet = sexoPet;
-        this.endereço = endereço;
-        this.idade = idade;
-        this.peso = peso;
-        this.raça = raça;
+        this.endereco = endereco;
+        this.idade = validarIdade(idade);
+        this.peso = validarPesoPet(peso);
+        this.raca = validarRaca(raca);
     }
-
 
     public static String validarNome(String nomeCompleto) {
         if (isCampoVazio(nomeCompleto)) {
@@ -46,11 +43,11 @@ public class Pet {
     }
 
     public static String validarPesoPet(String pesoString) {
-        if (isCampoVazio(pesoString)) {
+        if (isCampoVazio(pesoString) || pesoString.equals("NAO_INFORMADO")) {
             return VALOR_PADRAO;
         }
 
-        Pattern pattern = Pattern.compile("^\\d+$");
+        Pattern pattern = Pattern.compile("^\\d+(\\.\\d+)?$");
         double peso;
 
         if (pattern.matcher(pesoString).matches()) {
@@ -120,10 +117,10 @@ public class Pet {
                 "nomeCompleto='" + nomeCompleto + '\'' +
                 ", tipoPet=" + tipoPet +
                 ", sexoPet=" + sexoPet +
-                ", endereço=" + endereço +
+                ", endereço=" + endereco +
                 ", idade='" + idade + '\'' +
                 ", peso='" + peso + '\'' +
-                ", raça='" + raça + '\'' +
+                ", raça='" + raca + '\'' +
                 '}';
     }
 
@@ -139,8 +136,8 @@ public class Pet {
         return sexoPet;
     }
 
-    public Endereço getEndereço() {
-        return endereço;
+    public Endereço getEndereco() {
+        return endereco;
     }
 
     public String getIdade() {
@@ -151,8 +148,8 @@ public class Pet {
         return peso;
     }
 
-    public String getRaça() {
-        return raça;
+    public String getRaca() {
+        return raca;
     }
 
     public String getNomeArquivo() {

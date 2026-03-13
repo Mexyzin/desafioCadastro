@@ -51,7 +51,6 @@ public class MenuPrincipal {
 
             switch (option) {
                 case 1:
-                    System.out.println("Cadastrar novo pet (em desenvolvimento)");
                     petService.cadastrarPet(sc);
                     break;
                 case 2:
