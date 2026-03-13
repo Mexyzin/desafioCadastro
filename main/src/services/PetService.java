@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.function.Function;
 
+import static ui.MenuBusca.buscarPet;
+
 public class PetService {
 
     public void cadastrarPet() {
@@ -61,34 +63,34 @@ public class PetService {
         }
     }
 
-    public void alterarPet(){
+    public void alterarPet() {
         PetRepository petRepository = new PetRepository();
         Scanner sc = new Scanner(System.in);
 
         List<Pet> todosPets = petRepository.listarPets();
-        if(todosPets.isEmpty()){
+        if (todosPets.isEmpty()) {
             System.out.println("Nenhum pet cadastrado.");
             return;
         }
 
-      List<Pet> pets = MenuBusca.buscarPet();
+        List<Pet> pets = buscarPet();
 
-        if(pets.isEmpty()){
+        if (pets.isEmpty()) {
             System.out.println("Nenhum pet encontrado com os critérios informados. Tente novamente.");
             return;
         }
 
         System.out.print("\nEscolha o número do pet >> ");
         int escolha = -1;
-        while (true){
+        while (true) {
             try {
                 escolha = Integer.parseInt(sc.nextLine()) - 1;
-                if (escolha >= 0 && escolha < pets.size()){
+                if (escolha >= 0 && escolha < pets.size()) {
                     break;
                 }
                 System.out.print("Opção inválida. Escolha um número entre 1 e " + pets.size() + " >> ");
 
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 System.out.print("Por favor, digite um número válido >> ");
             }
         }
@@ -97,7 +99,7 @@ public class PetService {
 
         String[] camposEditados = MenuBusca.menuAlterarDados(sc, petAntigo);
 
-        List<String> respostaMescladas = petRepository.realizarMergeDeDados(petAntigo,camposEditados);
+        List<String> respostaMescladas = petRepository.realizarMergeDeDados(petAntigo, camposEditados);
 
         String novoNome = respostaMescladas.get(0);
         TipoPet novoTipo = TipoPet.validarTipoPet(respostaMescladas.get(1));
@@ -119,15 +121,97 @@ public class PetService {
         try {
             petRepository.alterarDadosPet(petAntigo, petNovo, respostaMescladas);
             System.out.println("\n Pet atualizado com sucesso!");
-        }catch (Exception e){
+        } catch (Exception e) {
             System.err.println("\n Erro ao atualizar pet: " + e.getMessage());
+        }
+    }
+
+    public void deletarPet() {
+        Scanner sc = new Scanner(System.in);
+
+        List<Pet> pets = buscarPet();
+
+        if (pets.isEmpty()) {
+            System.out.println("Nenhum pet encontrado com os critérios informados. Tente novamente.");
+            return;
+        }
+
+        int escolha = escolherPet(pets, sc);
+
+        if (confirmarExclusao(pets.get(escolha), sc)){
+            PetRepository petRepository = new PetRepository();
+            petRepository.deletarArquivoPet(pets.get(escolha).getNomeArquivo());
+            System.out.println("\nPet excluído com sucesso.");
+        }else {
+            System.out.println("Operação cancelada.");
+        }
+    }
+
+    public void listarTodosPets(){
+        PetRepository petRepository = new PetRepository();
+        List<Pet> todosPets = petRepository.listarPets();
+
+        if (todosPets.isEmpty()) {
+            System.out.println("Nenhum pet cadastrado.");
+        }
+
+        System.out.println();
+        for (int i = 0; i < todosPets.size(); i++) {
+            Pet p = todosPets.get(i);
+            String linha = String.format("%d. %s - %s - %s - %s - %s anos - %skg - %s",
+                    (i + 1),
+                    p.getNomeCompleto(),
+                    p.getTipoPet().getTipoPet(),
+                    p.getSexoPet().getSexoPet(),
+                    p.getEndereço().toString(),
+                    p.getIdade(),
+                    p.getPeso(),
+                    p.getRaça());
+            System.out.println(linha);
+        }
+    }
+
+    private int escolherPet(List<Pet> pets, Scanner sc) {
+        System.out.print("\nEscolha o número do pet >> ");
+
+        while (true) {
+            try {
+                int escolha = Integer.parseInt(sc.nextLine()) - 1;
+                if (escolha >= 0 && escolha < pets.size()) {
+                    return escolha;
+                }
+                System.out.print("Opção inválida. Escolha um número entre 1 e " + pets.size() + " >> ");
+
+            } catch (NumberFormatException e) {
+                System.out.print("Por favor, digite um número válido >> ");
+            }
+        }
+    }
+
+    private boolean confirmarExclusao(Pet pet, Scanner sc) {
+        System.out.print("Você deseja realmente excluir o pet " + pet.getNomeCompleto() + "? (SIM/NAO) >> ");
+
+        while (true) {
+
+            String confirmação = sc.nextLine();
+
+            if (confirmação.equalsIgnoreCase("SIM")) {
+                return true;
+            }
+
+            if (confirmação.equalsIgnoreCase("NAO")) {
+                System.out.println("Operação cancelada.");
+                return false;
+            }
+
+            System.out.print("Opção inválida. Por favor, escolha entre SIM para concluir a operação e NAO para cancelar >> ");
         }
     }
 
 
     public static void main(String[] args) {
         PetService petService = new PetService();
-        petService.alterarPet();
+        petService.listarTodosPets();
     }
 
 }

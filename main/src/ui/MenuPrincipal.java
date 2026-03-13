@@ -59,10 +59,10 @@ public class MenuPrincipal {
                     petService.alterarPet();
                     break;
                 case 3:
-                    System.out.println("Deletar pet (em desenvolvimento)");
+                    petService.deletarPet();
                     break;
                 case 4:
-                    System.out.println("Listar todos os pets (em desenvolvimento)");
+                    petService.listarTodosPets();
                     break;
                 case 5:
                     MenuBusca.buscarPet();

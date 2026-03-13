@@ -20,7 +20,7 @@ public enum TipoPet {
 
     public static TipoPet validarTipoPet(String texto) {
         if (texto == null || texto.isBlank()){
-            throw new ValidacaoException("Campo vazio! Por favor, digite um tipo válido (Gato/Cachorro) ou deixe em branco >> ");
+            throw new ValidacaoException("Campo vazio! Por favor, digite um tipo válido (Gato/Cachorro) >> ");
         }
 
         for (TipoPet pet : values()) {
@@ -28,7 +28,7 @@ public enum TipoPet {
                 return pet;
             }
         }
-        throw new ValidacaoException("Tipo inválido! Por favor, digite um tipo válido (Gato/Cachorro) ou deixe em branco >> ");
+        throw new ValidacaoException("Tipo inválido! Por favor, digite um tipo válido (Gato/Cachorro) >> ");
     }
 
     public static void main(String[] args) {
