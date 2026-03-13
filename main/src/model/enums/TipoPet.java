@@ -30,5 +30,4 @@ public enum TipoPet {
         }
         throw new ValidacaoException("Tipo inválido! Por favor, digite um tipo válido (Gato/Cachorro) >> ");
     }
-
 }

@@ -21,13 +21,17 @@ public class PetRepository {
 
     private static final String DIRECTORY = "petsCadastrados";
 
-    {
+    public PetRepository(){
+        inicializarDiretorio();
+    }
+
+    private void inicializarDiretorio() {
         Path pastaPath = Paths.get(DIRECTORY);
         if (Files.notExists(pastaPath)) {
             try {
                 Files.createDirectory(pastaPath);
             } catch (IOException e) {
-                System.out.println("Não foi possivel criar a pasta: " + e.getMessage());
+                System.err.println("Erro crítico: Não foi possível criar a pasta " + DIRECTORY);
             }
         }
     }

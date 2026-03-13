@@ -15,6 +15,9 @@ public class Pet {
     private String peso;
     private String raca;
     private String nomeArquivo;
+    private static final Pattern REGEX_NOME = Pattern.compile("^[A-Za-z]+(?:\\s+[A-Za-z]+)+$");
+    private static final Pattern REGEX_PESO = Pattern.compile("^\\d+(\\.\\d+)?$");
+    private static final Pattern REGEX_RACA = Pattern.compile("^[A-Za-zÀ-ÖØ-öø-ÿ]+(?:\\s[A-Za-zÀ-ÖØ-öø-ÿ]+)*$");
     private final static String VALOR_PADRAO = "NAO_INFORMADO";
 
     public Pet(String nomeCompleto, TipoPet tipoPet, SexoPet sexoPet, Endereço endereco, String idade, String peso, String raca) {
@@ -32,10 +35,7 @@ public class Pet {
             return VALOR_PADRAO;
         }
 
-        String regex = "^[A-Za-z]+(?:\\s+[A-Za-z]+)+$";
-        Pattern pattern = Pattern.compile(regex);
-
-        if (!pattern.matcher(nomeCompleto).matches()) {
+        if (!REGEX_NOME.matcher(nomeCompleto).matches()) {
             throw new ValidacaoException("Nome inválido. Informe nome e sobrenome, somente letras ou deixe vazio (apenas aperte enter) >> ");
         }
 
@@ -47,10 +47,9 @@ public class Pet {
             return VALOR_PADRAO;
         }
 
-        Pattern pattern = Pattern.compile("^\\d+(\\.\\d+)?$");
         double peso;
 
-        if (pattern.matcher(pesoString).matches()) {
+        if (REGEX_PESO.matcher(pesoString).matches()) {
             peso = Double.parseDouble(pesoString);
             if (peso < 60 && peso > 0.5) {
                 return pesoString;
@@ -97,10 +96,8 @@ public class Pet {
         }
 
         String nomeFormatado = raca.trim();
-        String regex = "^[A-Za-zÀ-ÖØ-öø-ÿ]+(?:\\s[A-Za-zÀ-ÖØ-öø-ÿ]+)*$";
-        Pattern pattern = Pattern.compile(regex);
 
-        if (!pattern.matcher(nomeFormatado).matches()) {
+        if (!REGEX_RACA.matcher(nomeFormatado).matches()) {
             throw new ValidacaoException("Raça invalida. Digite apenas letras ou deixe vazio (apenas aperte enter) >> ");
         }
 
