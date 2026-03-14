@@ -1,1 +1,0 @@
-- Uma ideia para a parte de repository, seria criar um bloco de inicialização que sempre que a classe for chamada verifica se o arquivo existe senão ele criar um automaticamente. Isso a respeito das perguntas do formulário.
