@@ -1,11 +1,13 @@
 # IDEs
 .idea/
 .vscode/
+*.iml
 
 # Compilados Java
 *.class
-target/
 out/
+target/
+build/
 
 # Logs
 *.log
@@ -14,6 +16,5 @@ out/
 .DS_Store
 Thumbs.db
 
-# Builds e Arquivos Testes
-.out/
+# Arquivos gerados pela aplicação
 petsCadastrados/
