@@ -12,12 +12,18 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.function.Function;
 
-import static ui.MenuBusca.buscarPet;
-
 public class PetService {
+    private final FormularioService formularioService;
+    private final PetRepository petRepository;
+    private final MenuBusca menuBusca;
+
+    public PetService(FormularioService formularioService, PetRepository petRepository, MenuBusca menuBusca){
+        this.formularioService = formularioService;
+        this.petRepository = petRepository;
+        this.menuBusca = menuBusca;
+    }
 
     public void cadastrarPet(Scanner sc) {
-        FormularioService formularioService = new FormularioService();
 
         List<String> listForm = formularioService.obterPerguntasDoFormulario();
         List<String> listFormEndereco = formularioService.obterPerguntasDoFormularioEndereco();
@@ -46,8 +52,7 @@ public class PetService {
         respostas.add(raca);
 
         Pet pet = new Pet(nome, tipo, sexo, endereço, idade, peso, raca);
-        PetRepository petRepository = new PetRepository();
-        petRepository.salvarPet(pet, respostas);
+        this.petRepository.salvarPet(pet, respostas);
     }
 
     public static <T> T perguntarAteValido(String pergunta, Scanner sc, Function<String, T> validador) {
@@ -63,15 +68,14 @@ public class PetService {
     }
 
     public void alterarPet(Scanner sc) {
-        PetRepository petRepository = new PetRepository();
 
-        List<Pet> todosPets = petRepository.listarPets();
+        List<Pet> todosPets = this.petRepository.listarPets();
         if (todosPets.isEmpty()) {
             System.out.println("Nenhum pet cadastrado.");
             return;
         }
 
-        List<Pet> pets = buscarPet(sc);
+        List<Pet> pets = menuBusca.buscarPet(sc);
 
         if (pets.isEmpty()) {
             System.out.println("Nenhum pet encontrado com os critérios informados. Tente novamente.");
@@ -97,7 +101,7 @@ public class PetService {
 
         String[] camposEditados = MenuBusca.menuAlterarDados(sc, petAntigo);
 
-        List<String> respostaMescladas = petRepository.realizarMergeDeDados(petAntigo, camposEditados);
+        List<String> respostaMescladas = this.petRepository.realizarMergeDeDados(petAntigo, camposEditados);
 
         String novoNome = respostaMescladas.get(0);
         TipoPet novoTipo = TipoPet.validarTipoPet(respostaMescladas.get(1));
@@ -117,7 +121,7 @@ public class PetService {
         Pet petNovo = new Pet(novoNome, novoTipo, novoSexo, novoEndereco, novaIdade, novoPeso, novaRaca);
 
         try {
-            petRepository.alterarDadosPet(petAntigo, petNovo, respostaMescladas);
+            this.petRepository.alterarDadosPet(petAntigo, petNovo, respostaMescladas);
             System.out.println("\n Pet atualizado com sucesso!");
         } catch (Exception e) {
             System.err.println("\n Erro ao atualizar pet: " + e.getMessage());
@@ -125,7 +129,7 @@ public class PetService {
     }
 
     public void deletarPet(Scanner sc) {
-        List<Pet> pets = buscarPet(sc);
+        List<Pet> pets = menuBusca.buscarPet(sc);
 
         if (pets.isEmpty()) {
             System.out.println("Nenhum pet encontrado com os critérios informados. Tente novamente.");
@@ -135,8 +139,7 @@ public class PetService {
         int escolha = escolherPet(pets, sc);
 
         if (confirmarExclusao(pets.get(escolha), sc)){
-            PetRepository petRepository = new PetRepository();
-            petRepository.deletarArquivoPet(pets.get(escolha).getNomeArquivo());
+            this.petRepository.deletarArquivoPet(pets.get(escolha).getNomeArquivo());
             System.out.println("\nPet excluído com sucesso.");
         }else {
             System.out.println("Operação cancelada.");
@@ -144,8 +147,7 @@ public class PetService {
     }
 
     public void listarTodosPets(){
-        PetRepository petRepository = new PetRepository();
-        List<Pet> todosPets = petRepository.listarPets();
+        List<Pet> todosPets = this.petRepository.listarPets();
 
         if (todosPets.isEmpty()) {
             System.out.println("Nenhum pet cadastrado.");

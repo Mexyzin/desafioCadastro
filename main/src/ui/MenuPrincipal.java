@@ -1,6 +1,7 @@
 package ui;
 
 import repository.FormularioRepository;
+import services.FormularioService;
 import services.PetService;
 
 import java.util.List;
@@ -8,19 +9,25 @@ import java.util.Scanner;
 
 public class MenuPrincipal {
 
-    public static void viewForm() {
-        FormularioRepository formularioRepository = new FormularioRepository();
-        List<String> listForm = formularioRepository.lerPerguntas();
+    private final PetService petService;
+    private final FormularioRepository formularioRepository;
+    private final MenuBusca menuBusca;
+
+    public MenuPrincipal(PetService petService, FormularioRepository formularioRepository, MenuBusca menuBusca){
+        this.petService = petService;
+        this.formularioRepository = formularioRepository;
+        this.menuBusca = menuBusca;
+    }
+
+    public void viewForm() {
+        List<String> listForm = this.formularioRepository.lerPerguntas();
         for (String s : listForm) {
             System.out.println(s);
         }
     }
 
-    public static void showMenu(Scanner sc) {
-        FormularioRepository formularioRepository = new FormularioRepository();
-        List<String> menuOptions = formularioRepository.lerMenu();
-        PetService petService = new PetService();
-
+    public void showMenu(Scanner sc) {
+        List<String> menuOptions = this.formularioRepository.lerMenu();
 
         while (true) {
 
@@ -51,19 +58,19 @@ public class MenuPrincipal {
 
             switch (option) {
                 case 1:
-                    petService.cadastrarPet(sc);
+                    this.petService.cadastrarPet(sc);
                     break;
                 case 2:
-                    petService.alterarPet(sc);
+                    this.petService.alterarPet(sc);
                     break;
                 case 3:
-                    petService.deletarPet(sc);
+                    this.petService.deletarPet(sc);
                     break;
                 case 4:
-                    petService.listarTodosPets();
+                    this.petService.listarTodosPets();
                     break;
                 case 5:
-                    MenuBusca.buscarPet(sc);
+                    menuBusca.buscarPet(sc);
                     break;
                 case 6:
                     System.out.println("Saindo do sistema...");

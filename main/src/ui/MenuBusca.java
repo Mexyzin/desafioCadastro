@@ -15,10 +15,15 @@ import java.util.Scanner;
 
 public class MenuBusca {
 
-    public static List<Pet> buscarPet(Scanner sc) {
-        PetRepository petRepository = new PetRepository();
-        BuscarPetService buscarPetService = new BuscarPetService();
+    private final PetRepository petRepository;
+    private final BuscarPetService buscarPetService;
 
+    public MenuBusca(PetRepository petRepository, BuscarPetService buscarPetService){
+        this.petRepository = petRepository;
+        this.buscarPetService = buscarPetService;
+    }
+
+    public List<Pet> buscarPet(Scanner sc) {
 
         System.out.println("\n==================================");
         System.out.println("          BUSCA DE PETS         ");
@@ -103,8 +108,8 @@ public class MenuBusca {
         }
 
         System.out.println("\nBuscando....");
-        List<Pet> todosPets = petRepository.listarPets();
-        List<Pet> encontrados = buscarPetService.buscarPets(todosPets, tipoBuscado, filtros);
+        List<Pet> todosPets = this.petRepository.listarPets();
+        List<Pet> encontrados = this.buscarPetService.buscarPets(todosPets, tipoBuscado, filtros);
 
         System.out.println("\n --- RESULTADDOS DA BUSCA---");
         if (encontrados.isEmpty()) {

@@ -6,13 +6,17 @@ import java.util.List;
 
 public class FormularioService {
 
-    private final FormularioRepository repository = new FormularioRepository();
+    private final FormularioRepository formularioRepository;
+
+    public FormularioService(FormularioRepository formularioRepository){
+        this.formularioRepository = formularioRepository;
+    }
 
     public List<String> obterPerguntasDoFormulario() {
-        return repository.lerPerguntas();
+        return this.formularioRepository.lerPerguntas();
     }
 
     public List<String> obterPerguntasDoFormularioEndereco() {
-        return repository.lerPerguntasEndereco();
+        return this.formularioRepository.lerPerguntasEndereco();
     }
 }
